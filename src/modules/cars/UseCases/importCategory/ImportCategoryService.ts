@@ -1,14 +1,17 @@
 import fs from 'fs';
 import csvParse from 'csv-parse';
 import { ICategoriesRepository } from '../../repositories/ICategoriesRepository';
+import { inject, injectable } from 'tsyringe';
 
 interface IImportCategory {
   name: string;
   description: string;
 }
 
+@injectable()
 export class ImportCategoryService {
   constructor(
+    @inject('CategoriesRepository')
     private categoriesRepository: ICategoriesRepository
   ) {}
 
@@ -38,10 +41,10 @@ export class ImportCategoryService {
   public async execute(file: Express.Multer.File): Promise<void> {
     const categories = await this.loadCategories(file);
 
-    categories.map(category => {
+    categories.map(async (category) => {
       const { name, description } = category;
 
-      const categoryExists = this.categoriesRepository.findByName(name);
+      const categoryExists = await this.categoriesRepository.findByName(name);
       if(!categoryExists) {
         this.categoriesRepository.create({
           name,

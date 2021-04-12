@@ -1,16 +1,15 @@
 import { Request, Response } from "express";
+import { container } from 'tsyringe';
 import { CreateCategoryService } from "./CreateCategoryService";
 
 
 export class CreateCategoryController {
-  constructor(
-    private createCategoryService: CreateCategoryService
-  ) {}
-  
-  public create(request: Request, response: Response) {
+  public async create(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
+
+    const createCategoryService = container.resolve(CreateCategoryService);
     
-    this.createCategoryService.execute({
+    await createCategoryService.execute({
       name,
       description,
     });

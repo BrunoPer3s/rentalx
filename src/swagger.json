@@ -72,6 +72,203 @@
           }
         }
       }
+    },
+    "/categories/import": {
+      "post": {
+        "tags": ["Category"],
+        "summary": "Upload a new category",
+        "description": "Upload a new category",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/specifications": {
+      "post": {
+        "tags": ["Specification"],
+        "summary": "Create a specification",
+        "description": "Create a new specification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Specification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Specification already exists!"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "patch": {
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "tags": ["User"],
+        "summary": "Update user avatar",
+        "description": "This can only be done by the authenticated user.",
+       
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "User avatar updated successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Authenticate a user",
+        "description": "Authenticate user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Authentication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication succeed"
+          },
+          "400": {
+            "description": "Incorrect Email/Password! please check your credentials."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "name": "token",
+        "in": "header",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "definitions": {
+    "Specification": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "username": {
+          "type": "string",
+          "example": "john"
+        },
+        "email": {
+          "type": "string",
+          "example": "johnDoe@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
+        },
+        "driver_license": {
+          "type": "string",
+          "example": "123456789"
+        }
+      }
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johnDoe@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
+        }
+      }
     }
   }
 }
