@@ -2,3 +2,4 @@ node_modules
 docker-compose.yml
 ormconfig.json
 .env
+tmp
